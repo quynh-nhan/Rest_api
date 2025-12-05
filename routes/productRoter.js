@@ -58,7 +58,7 @@ var sendMail= require("../utils/Mail");
   router.get("/all", async function(req,res) {
     // const list = await productRouter.find({},"name description price").populate("cateID");
     // const list = await productRouter.find({$and :[{price:{$gt:20000}},{quantity:{$gt:10}}]});
-    const list = await productRouter.find().sort({price:-1}).skip(2).limit(1);
+    const list = await productRouter.find();
     res.status(200).json({status:true,message:"thanh cong",data:list})
   });
 
