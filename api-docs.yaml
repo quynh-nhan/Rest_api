@@ -1,0 +1,490 @@
+openapi: 3.0.4
+info:
+  title: Demo Product & Category API
+  description: API demo CRUD cho Products và Categories, chạy trên localhost:3000
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+tags:
+  - name: product
+    description: Quản lý sản phẩm
+  - name: Category
+    description: Quản lý danh mục sản phẩm
+
+paths:
+  # ===================== PRODUCT =====================
+  /product/add-product:
+    post:
+      tags:
+        - product
+      summary: Thêm sản phẩm mới
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Thêm sản phẩm thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /product/update-product:
+    put:
+      tags:
+        - product
+      summary: Cập nhật sản phẩm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+      responses:
+        '200':
+          description: Cập nhật sản phẩm
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /product/delete-product:
+    delete:
+      tags:
+        - product
+      summary: Xóa sản phẩm theo ID
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Xóa sản phẩm
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /product/all:
+    get:
+      tags:
+        - product
+      summary: Lấy tất cả sản phẩm
+      responses:
+        '200':
+          description: Danh sách sản phẩm
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+  # ===================== IMAGE UPLOAD =====================
+  /product/upload:
+    post:
+      tags:
+        - Image
+      summary: Upload 1 hình ảnh
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                hinhAnh:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Upload thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 1
+                  url:
+                    type: string
+                    example: "http://localhost:3000/images/abc.jpg"
+
+  /product/uploads:
+    post:
+      tags:
+        - Image
+      summary: Upload nhiều hình ảnh (tối đa 9)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Upload thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 1
+                  url:
+                    type: array
+                    items:
+                      type: string
+                      example: "http://localhost:3000/images/abc.jpg"
+  # ===================== CATEGORY =====================
+  /category/add-category:
+    post:
+      tags:
+        - Category
+      summary: Thêm danh mục mới
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreate'
+      responses:
+        '200':
+          description: Thêm thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+        '400':
+          description: Thêm thất bại
+
+  /category/update-category:
+    put:
+      tags:
+        - Category
+      summary: Cập nhật danh mục
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          description: Cập nhật thành công hoặc không tìm thấy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /category/delete-category:
+    delete:
+      tags:
+        - Category
+      summary: Xóa danh mục bằng query param
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Xóa thành công hoặc không tìm thấy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /category/delete-category-2/{id}:
+    delete:
+      tags:
+        - Category
+      summary: Xóa danh mục bằng path param
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Xóa thành công hoặc không tìm thấy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /category/all:
+    get:
+      tags:
+        - Category
+      summary: Lấy tất cả danh mục
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryList'
+  # ===================== IMAGE =====================
+  /image/add-image:
+    post:
+      tags:
+        - Image
+      summary: Thêm ảnh mới
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageCreate'
+      responses:
+        '200':
+          description: Thêm thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+        '400':
+          description: Thêm thất bại
+
+  /image/update-image:
+    put:
+      tags:
+        - Image
+      summary: Cập nhật ảnh
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageUpdate'
+      responses:
+        '200':
+          description: Cập nhật thành công hoặc không tìm thấy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /image/delete-image:
+    delete:
+      tags:
+        - Image
+      summary: Xóa ảnh theo query param
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "64f2c9d2f0a1b2c3d4e5f6b"
+      responses:
+        '200':
+          description: Xóa thành công hoặc không tìm thấy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+
+  /image/delete-image-2/{id}:
+    delete:
+      tags:
+        - Image
+      summary: Xóa ảnh theo path param
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "64f2c9d2f0a1b2c3d4e5f6b"
+      responses:
+        '200':
+          description: Xóa thành công hoặc không tìm thấy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
+components:
+  schemas:
+    # ====== PRODUCT ======
+    Product:
+      type: object
+      required:
+        - name
+        - price
+        - quantity
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          example: "Bánh Socola"
+        description:
+          type: string
+          example: "Bánh socola thơm ngon"
+        price:
+          type: number
+          example: 50000
+        quantity:
+          type: integer
+          example: 20
+        status:
+          type: boolean
+          example: true
+        cateID:
+          type: string
+          example: "64f2c9d2f0a1b2c3d4e5f6a"
+        createAt:
+          type: string
+          format: date-time
+        updateAt:
+          type: string
+          format: date-time
+
+    ProductUpdate:
+      allOf:
+        - $ref: '#/components/schemas/Product'
+        - type: object
+          required:
+            - id
+
+    ProductList:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "thanh cong"
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+
+    ResponseMessage:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+
+    # ====== CATEGORY ======
+    CategoryCreate:
+      type: object
+      required:
+        - CateName
+      properties:
+        CateName:
+          type: string
+          example: "Bánh ngọt"
+        ParentID:
+          type: string
+          example: "64f2c9d2f0a1b2c3d4e5f6a"
+
+    CategoryUpdate:
+      allOf:
+        - $ref: '#/components/schemas/CategoryCreate'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              example: "64f2c9d2f0a1b2c3d4e5f6a"
+
+    CategoryList:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "thanh cong"
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "64f2c9d2f0a1b2c3d4e5f6a"
+              CateName:
+                type: string
+                example: "Bánh ngọt"
+              ParentID:
+                type: string
+                example: "64f2c9d2f0a1b2c3d4e5f6a"
+
+    # ====== IMAGE ======
+    ImageCreate:
+      type: object
+      required:
+        - name
+        - url
+      properties:
+        name:
+          type: string
+          example: "Ảnh bánh socola"
+        url:
+          type: string
+          example: "http://localhost:3000/images/banh-socola.jpg"
+        productID:
+          type: string
+          example: "64f2c9d2f0a1b2c3d4e5f6a"
+
+    ImageUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ImageCreate'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              example: "64f2c9d2f0a1b2c3d4e5f6b"
+
+    ImageList:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "thanh cong"
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "64f2c9d2f0a1b2c3d4e5f6b"
+              name:
+                type: string
+                example: "Ảnh bánh socola"
+              url:
+                type: string
+                example: "http://localhost:3000/images/banh-socola.jpg"
+              productID:
+                type: string
+                example: "64f2c9d2f0a1b2c3d4e5f6a"

@@ -1,0 +1,41 @@
+cateid catename            parentid
+CA01 dienthoai              null
+CA02 laptop                 null
+CA03 dien thoai thong minh  CA01
+
+// string(text),number,null,object,array,true/false
+// key luôn là string 
+// json array
+    [
+        {
+            "CateID" : "CA01",
+            "CateName" : "Dien thoai",
+            "ParentID" : null
+        },
+        {
+            "CateID" : "CA02",
+            "CateName" : "Laptop",
+            "ParentID" : null
+        },
+         {
+            "CateID" : "CA03",
+            "CateName" : "Dien thoai thong minh",
+            "ParentID" : {
+                "CateID":"CA01",
+                "CateName" :"Dien thoai",
+                "ParentID":null
+            }
+        }
+    ]
+// json object 
+{
+    "CateID" : "CA01",
+    "CateName" : "Dien thoai",
+    "ParentID" : null
+}
+
+{
+    "CateID" : "CA02",
+    "CateName" : "Laptop",
+    "ParentID" : null
+}
