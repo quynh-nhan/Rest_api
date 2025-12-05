@@ -40,7 +40,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //connect database
-mongoose.connect('mongodb+srv://truongnguyenquynhnhan_db_user:K36Nb5uyQW0tZtq2@cluster0.dadqfpi.mongodb.net/')
+mongoose.connect('mongodb+srv://truongnguyenquynhnhan_db_user:K36Nb5uyQW0tZtq2@cluster0.dadqfpi.mongodb.net/MD20302')
   .then(() => console.log('>>>>>>>>>> DB Connected!!!!!!'))
   .catch(err => console.log('>>>>>>>>> DB Error: ', err));
 
